@@ -1,0 +1,30 @@
+{
+  "name": "social-media-api",
+  "version": "1.0.0",
+  "description": "API for tracking social media data.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shrcker/Social-Media-API.git"
+  },
+  "keywords": [
+    "api",
+    "social",
+    "media",
+    "backend"
+  ],
+  "author": "Shrcker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Shrcker/Social-Media-API/issues"
+  },
+  "homepage": "https://github.com/Shrcker/Social-Media-API#readme",
+  "dependencies": {
+    "dayjs": "^1.11.11",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1"
+  }
+}

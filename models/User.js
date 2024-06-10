@@ -8,7 +8,13 @@ const userSchema = new Schema(
       required: true,
       max_length: 50
     },
-    posts: [postSchema]
+    email: {
+      type: String,
+      required: true,
+
+    },
+    posts: [postSchema],
+    friends: [userSchema]
   },
   {
     toJSON: {
@@ -16,6 +22,10 @@ const userSchema = new Schema(
     }
   }
 );
+
+userSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
+});
 
 const User = model("user", userSchema);
 

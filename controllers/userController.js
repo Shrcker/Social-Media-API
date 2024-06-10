@@ -45,5 +45,26 @@ module.exports = {
       res.status(500).json(error);
 
     }
+  },
+  async publishPost (req, res) {
+    console.log("%cYou are adding this post:\n", "color:blue;font-size:20px;");
+    console.log(req.body);
+
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { posts: req.body } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "No user found with that id; cannot publish!" });
+      }
+
+      res.json(user);
+      console.log("%cPost successfully published!", "color:green;font-size:20px;");
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }

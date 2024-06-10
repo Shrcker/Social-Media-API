@@ -1,4 +1,4 @@
-const { User, Post } = require("../models");
+const { User, post } = require("../models");
 
 module.exports = {
   async getUsers (req, res) {
@@ -9,10 +9,10 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+
   async getOneUser (req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId })
-        .select('-__v');
+      const user = await User.findOne({ _id: req.params.userId });
       
       if (!user) {
         return res.status(404).json({ message: "No user with that ID" });
@@ -23,6 +23,7 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+
   async createUser (req, res) {
     try {
       const user = await User.create(req.body);
@@ -47,9 +48,6 @@ module.exports = {
     }
   },
   async publishPost (req, res) {
-    console.log("%cYou are adding this post:\n", "color:blue;font-size:20px;");
-    console.log(req.body);
-
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
@@ -63,6 +61,23 @@ module.exports = {
 
       res.json(user);
       console.log("%cPost successfully published!", "color:green;font-size:20px;");
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  async deletePost(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { posts: { postId: req.params.postId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "No post was found with that id; cannot delete post"});
+      }
+
+      res.json(user);
     } catch (error) {
       res.status(500).json(error);
     }

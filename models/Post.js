@@ -1,4 +1,8 @@
 const { Schema, Types } = require("mongoose");
+const userSchema = require("./User");
+const replySchema = require("./Reply");
+const { formatDate } = require("../utils/dateHelper");
+const date = new Date();
 
 const postSchema = new Schema(
   {
@@ -6,18 +10,11 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId()
     },
-    postName: {
-      type: String,
-      required: false,
-      maxLength: 50,
-      minLength: 4,
-      default: "Unnamed Post"
-    },
     postContent: {
       type: String,
       required: true,
-      maxLength: 60,
-      minLength: 4
+      maxLength: 280,
+      minLength: 1
     },
     likes: {
       type: Number,
@@ -26,9 +23,15 @@ const postSchema = new Schema(
       default: () => Math.floor(Math.random() * 100)
     },
     createdOn: {
-      type: Date,
-      default: Date.now
-    }
+      type: String,
+      default: formatDate(date)
+    },
+    username: {
+      type: String,
+      required: true,
+      default: userSchema.name
+    },
+    replies: [replySchema]
   },
   {
     toJSON: {
@@ -37,5 +40,9 @@ const postSchema = new Schema(
     id: false
   }
 );
+
+postSchema.virtual("replyCount").get(function () {
+  return this.replies.length;
+});
 
 module.exports = postSchema;

@@ -1,4 +1,4 @@
-const { User, post } = require("../models");
+const { User, Post } = require("../models");
 
 module.exports = {
   async getUsers (req, res) {
@@ -75,6 +75,66 @@ module.exports = {
 
       if (!user) {
         return res.status(404).json({ message: "No post was found with that id; cannot delete post"});
+      }
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  async getFriends (req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId })
+        .select("-__v")
+        .populate("friends");
+
+      if (!user) {
+        return res.status(404).json({ message: "No user was found with that id; cannot add friend" });
+      } else if (!user.friends.length) {
+        return res.status(404).json({ message: "This user has no friends; cannot get friends." });
+      }
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  async addFriend (req, res) {
+    try {
+      const newFriend = req.params.friendId;
+      const oldUser = await User.findOne({ _id: req.params.userId });
+
+      if (!User.find({ _id: newFriend })) {
+        return res.status(404).json({ message: "User to friend doesn't exist" });
+      } else if (!oldUser.friends.includes(newFriend)) {
+
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $addToSet: { friends: req.params.friendId } },
+          { runValidators: true, new: true }
+        );
+
+        if (!user) {
+          return res.status(404).json({ message: "No user was found with that id; cannot add friend"});
+        }
+        
+        res.json(user);
+      }
+      res.status(404).json({ message: "This user has already friended this person" });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  async removeFriend (req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "User does not exist" });
       }
 
       res.json(user);

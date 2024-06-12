@@ -20,7 +20,7 @@ const postSchema = new Schema(
       type: Number,
       required: true,
       // temporary random number of likes for each post
-      default: () => Math.floor(Math.random() * 100)
+      default: 0
     },
     createdOn: {
       type: String,
@@ -29,7 +29,7 @@ const postSchema = new Schema(
     username: {
       type: String,
       required: true,
-      default: userSchema.name
+      default: userSchema.username
     },
     replies: [replySchema]
   },
@@ -44,5 +44,7 @@ const postSchema = new Schema(
 postSchema.virtual("replyCount").get(function () {
   return this.replies.length;
 });
+
+// const Post = model("post", postSchema);
 
 module.exports = postSchema;

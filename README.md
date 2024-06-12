@@ -1,2 +1,18 @@
-# Project In Progress
-# Please Come Back Later :3
+<h1 id='description'>Social Media API <a href="https://opensource.org/licenses/MIT"><img alt="The MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></h1><br />The social media API is a basic api that can be used to populate social media databases. Powered by Mongoose and MongoDB, a user may hook the API up to their own Mongo server and adjust models to their own likings or purposes. This API tracks users, their posts, and likes and friends lists which can be added with the appropriate API addresses.<br /><strong>Link:</strong> <a href=https://github.com/Shrcker/Social-Media-API>Github Link</a><br /><img src=./images/api-screen.png alt="Project Screenshot" /><br /><h3>Table of Contents</h3><ol><li><a href="#description"><span>Description</span></a></li><li><a href="#installation"><span>Installation</span></a></li><li><a href="#usage"><span>Usage</span></a></li><li><a href="#credits"><span>Credits</span></a></li><li><a href="#license"><span>License</span></a></li><li><a href="#questions"><span>Questions</span></a></li><li><a href="#features"><span>Features</span></a></li></ol><br /><h2 id='installation'> Installation</h2><br />Download the source files from this GitHub and add the project files to your own project, making adjustments to the server.js in order to strap the program onto your own Mongo client.<br /><h2 id='usage'>Usage</h2><br /> This code base can be used to either save time on a social media project or be adapted to any other project. Essentially, this project is made to act as a library for larger-scope projects.<br />For using the specific paths included with this API, here is some general guideline:<pre>localhost:3001/api/users/</pre>As a GET request, this returns an array of all users currently in the database. Such user objects are each saved with the key parameters: 
+<pre>{
+  username: "Name of the User",
+  email: "user@example.com",
+  posts: [postSchema],
+  friends: [userSchema]
+}</pre>
+Posts are a subdocument to the above user schema and can be accessed via the above API route. The following is the template for posts with this API, which are added with a post request:
+<pre>{
+  postContent: "1-280 length String",
+  username: "username of the author", // (WIP)
+}</pre>
+To delete a post, send a DELETE request to the following route:
+<pre>localhost:3001/api/users/userID/post/postID/</pre><br />
+Friends are managed through their own route, which requires the Mongo ID of the user you would like to get:
+<pre>localhost:3001/api/users/someMongoID/friends</pre>
+Simply using this with a GET request will return the first user with the array of friend ID's in their friends array now populated with that friend's information as an object identical to the above user object along with their own _id property. A PUT request followed by the Mongo ID of the person you'd like for the first user to add as a friend will add the second ID to the first user's friends array. Sending a DELETE request to the above route with the afforementioned method will remove a friend from the user profile.
+<br /><h2 id='credits'>Credits</h2><br /> Much of the starting code is based on the Ohio State University's Coding Boot Camp activity modules, specifically those that cover MongoDB. This was done to save time, and most of the code has been written over and adapted for this project's own purposes.<br /><h2 id='license'> License</h2><br /> The MIT License<br /><h2 id='questions'> Questions</h2><br /> Who is the project's host?<br />It's Shrcker; link to their profile:<a href="https://www.github.com/Shrcker">Link</a><br /> You can contact them through email: tanner.shirkey@gmail.com<br /><h2 id='features'> Features</h2><br />View and create users and their posts. Each post tracks likes separately which can be changed through front-end JavaScript. Each user has a friends list which is stored as an array along with posts and may be added.

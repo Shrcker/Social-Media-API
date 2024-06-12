@@ -3,10 +3,11 @@ const postSchema = require("./Post");
 
 const userSchema = new Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
-      max_length: 50
+      max_length: 50,
+      unique: true
     },
     email: {
       type: String,
@@ -14,7 +15,8 @@ const userSchema = new Schema(
 
     },
     posts: [postSchema],
-    friends: [userSchema]
+    friends: [{ type: Schema.Types.ObjectId, ref: "user" }]
+    // friends: ["user"]
   },
   {
     toJSON: {
